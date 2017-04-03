@@ -1,36 +1,48 @@
 package com.example.user.assignment3;
 
+/**
+ * Created by user on 4/3/2017.
+ */
+
+
+
 import android.app.Fragment;
 import android.app.FragmentTransaction;
+import android.support.design.widget.TabLayout;
 import android.support.v4.app.FragmentManager;
+import android.support.v4.view.ViewPager;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
 
-public class FirstPage extends AppCompatActivity implements FormFragment.DataPassListener {
-private Data data;
+public class FirstPageActivity extends AppCompatActivity implements FormFragment.DataPassListener {
+    private Data data;
     private int position;
     private Button button2;
     private Button button1;
     private  Button2FirstFragment fragment2=null;
+    private ViewPager viewPager;
+    private TabLayout tabLayout;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_first_page);
         startFirstFragment();
-       button1=(Button)findViewById(R.id.button_1);
+        button1=(Button)findViewById(R.id.button_1);
+
         button2=(Button)findViewById(R.id.button_2);
+
         button1.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-              button1Pressed();
+                button1Pressed();
             }
         });
         button2.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-              button2Pressed();
+                button2Pressed();
             }
         });
     }
@@ -44,6 +56,18 @@ private Data data;
 
 
         fragmentTransaction.commit();
+
+
+    }
+    public void setButtonsVisibilityFalse(){
+        button1.setVisibility(View.GONE);
+        button2.setVisibility(View.GONE);
+
+    }
+
+    public void setButtonsVisibilityTrue(){
+        button1.setVisibility(View.VISIBLE);
+        button2.setVisibility(View.VISIBLE);
 
     }
 
@@ -88,7 +112,7 @@ private Data data;
             fragmentTransaction.commit();
         }
 
-         else {
+        else {
             fragmentManager.beginTransaction().show(fragmentManager.findFragmentByTag("Button 2 fragment")).commit();
         }
         if(fragmentManager.findFragmentByTag("first fragment") != null){

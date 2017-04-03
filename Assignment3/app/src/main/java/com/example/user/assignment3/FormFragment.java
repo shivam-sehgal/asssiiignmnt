@@ -5,6 +5,7 @@ import android.app.Activity;
 import android.app.DatePickerDialog;
 import android.app.Dialog;
 import android.app.FragmentTransaction;
+import android.graphics.BitmapFactory;
 import android.support.annotation.IdRes;
 import android.support.v4.app.DialogFragment;
 import android.content.Context;
@@ -19,6 +20,8 @@ import android.provider.MediaStore;
 import android.support.annotation.RequiresApi;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
+import android.support.v4.graphics.drawable.RoundedBitmapDrawable;
+import android.support.v4.graphics.drawable.RoundedBitmapDrawableFactory;
 import android.support.v7.widget.LinearLayoutManager;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -67,6 +70,8 @@ public class FormFragment extends Fragment implements AdapterView.OnItemSelected
     private  EditText lastName;
    private String firstnameText;
     private String lastnameText;
+    private  int spinnerPosition;
+    private TextView spinnerTv;
     public FormFragment() {
         // Required empty public constructor
     }
@@ -90,9 +95,14 @@ public class FormFragment extends Fragment implements AdapterView.OnItemSelected
         rg = (RadioGroup) view.findViewById(R.id.my_radio_group);
         firstName=(EditText) view.findViewById(R.id.first_name_form);
         lastName=(EditText) view.findViewById(R.id.last_name_form);
-
+        ((FirstPageActivity)getActivity()).setData(null);
         spinner=(Spinner)view.findViewById(R.id.streams_spinner);
         btn=(Button)view.findViewById(R.id.submit);
+        spinnerTv=(TextView) view.findViewById(R.id.spinner_txt);
+        userImage= BitmapFactory.decodeResource(getActivity().getResources(),R.drawable.choose_pic);
+        RoundedBitmapDrawable roundedBitmapDrawable=RoundedBitmapDrawableFactory.create(getActivity().getResources(),userImage);
+        roundedBitmapDrawable.setCircular(true);
+        imageView.setImageDrawable(roundedBitmapDrawable);
         fragmentManager = getFragmentManager();
         return view;
     }
@@ -184,9 +194,9 @@ public class FormFragment extends Fragment implements AdapterView.OnItemSelected
             try {
                 userImage = MediaStore.Images.Media.getBitmap(getActivity().getApplicationContext().getContentResolver(), uri);
                 // Log.d(TAG, String.valueOf(bitmap));
-
-
-                imageView.setImageBitmap(userImage);
+                RoundedBitmapDrawable roundedBitmapDrawable= RoundedBitmapDrawableFactory.create(getActivity().getResources(),userImage);
+                roundedBitmapDrawable.setCircular(true);
+                imageView.setImageDrawable(roundedBitmapDrawable);
             } catch (IOException e) {
                 e.printStackTrace();
             }
@@ -197,12 +207,12 @@ public class FormFragment extends Fragment implements AdapterView.OnItemSelected
 
          firstnameText=String.valueOf(firstName.getText());
          lastnameText=String.valueOf(lastName.getText());
-
+         ((FirstPageActivity)getActivity()).setData(null);
 
          if((userImage!=null)&&!(String.valueOf(dateOfBirthTextView.getText()).isEmpty())&&(gender!=null)&&(stream!=null)&&(!firstnameText.isEmpty())&&(!lastnameText.isEmpty())) {
 
-             Data data = new Data(userImage,firstnameText,lastnameText,String.valueOf(dateOfBirthTextView.getText()));
-             ((FirstPage)getActivity()).setData(data);
+             Data data = new Data(userImage,firstnameText,lastnameText,String.valueOf(dateOfBirthTextView.getText()),spinnerPosition,gender);
+             ((FirstPageActivity)getActivity()).setData(data);
 
               fragmentManager = getActivity().getSupportFragmentManager();
 
@@ -232,7 +242,11 @@ public class FormFragment extends Fragment implements AdapterView.OnItemSelected
     @Override
     public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
    stream=String.valueOf(parent.getItemAtPosition(position));
-        Toast.makeText(ctx,"value of stream is"+stream,Toast.LENGTH_SHORT).show();
+        spinnerPosition=position;
+        if(spinnerPosition!=0)
+        spinnerTv.setText(stream);
+
+        Toast.makeText(ctx,"value of position is"+String.valueOf(spinnerPosition),Toast.LENGTH_SHORT).show();
 
     }
 

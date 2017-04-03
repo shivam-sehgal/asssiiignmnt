@@ -14,9 +14,11 @@
         >
         <ImageView
             android:layout_width="0dp"
+            android:scaleType="fitXY"
             android:layout_height="match_parent"
             android:layout_weight="2"
             android:id="@+id/user_img"/>
+
         <TextView
             android:layout_gravity="center"
 

@@ -9,6 +9,26 @@ import android.graphics.Bitmap;
 public class Data {
 
     private Bitmap imageID;
+    private int position;
+
+    public String getGender() {
+        return gender;
+    }
+
+    public void setGender(String gender) {
+        this.gender = gender;
+    }
+
+    private String gender;
+    public int getPosition() {
+        return position;
+    }
+
+    public void setPosition(int position) {
+        this.position = position;
+    }
+
+
 
     public String getDateofBirth() {
         return dateofBirth;
@@ -46,13 +66,13 @@ public class Data {
     }
 
     private String lastName;
-    public Data( Bitmap img,String first,String last,String dob){
+    public Data( Bitmap img,String first,String last,String dob,int position,String gender){
         this.imageID=img;
         this.dateofBirth=dob;
         this.firstName=first;
         this.lastName=last;
-
-
+        this.position=position;
+        this.gender=gender;
     }
 
 

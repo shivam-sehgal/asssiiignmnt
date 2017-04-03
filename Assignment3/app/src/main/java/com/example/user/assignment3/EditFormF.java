@@ -53,6 +53,7 @@ public class EditFormF extends Fragment implements  AdapterView.OnItemSelectedLi
     private Context ctx;
     private String firstNameText;
     private String lastNameText;
+    private int spinnerPosition;
     public EditFormF() {
         // Required empty public constructor
     }
@@ -74,7 +75,9 @@ public class EditFormF extends Fragment implements  AdapterView.OnItemSelectedLi
         fragmentManager = getFragmentManager();
         editRadioGroup=(RadioGroup)view.findViewById(R.id.my_radio_group_edit);
         editMaleRadio=(RadioButton)view.findViewById(R.id.radio_male_edit);
+
         editFemaleRadio=(RadioButton)view.findViewById(R.id.radio_female_edit);
+
         spinner=(Spinner)view.findViewById(R.id.streams_spinner_edit);
         update=(Button)view.findViewById(R.id.update);
         ctx=getContext();
@@ -85,11 +88,13 @@ public class EditFormF extends Fragment implements  AdapterView.OnItemSelectedLi
     @Override
     public void onActivityCreated(Bundle savedInstanceState) {
        super.onActivityCreated(savedInstanceState);
-        Data data=((FirstPage)getActivity()).getData();
+        Data data=((FirstPageActivity)getActivity()).getData();
         userEditImageView.setImageBitmap(data.getImageID());
         FirstName.setText(data.getFirstName());
         LastName.setText(data.getLastName());
         setDateOfBirth.setText(data.getDateofBirth());
+
+        setRadioButtonValue();
         userEditImageView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -131,12 +136,25 @@ public class EditFormF extends Fragment implements  AdapterView.OnItemSelectedLi
 
 
     }
+    public void setRadioButtonValue(){
+       gender=((FirstPageActivity)getActivity()).getData().getGender();
+        if(gender.equals("Male")){
+            editMaleRadio.setChecked(true);
+
+        }
+        else{
+
+            editFemaleRadio.setChecked(true);
+        }
+
+    }
 
     public void setSpinner(){
         ArrayAdapter<CharSequence> adapter = ArrayAdapter.createFromResource(ctx,
                 R.array.streams, android.R.layout.simple_spinner_item);
         adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
         spinner.setAdapter(adapter);
+        spinner.setSelection(((FirstPageActivity)getActivity()).getData().getPosition());
 
     }
 
@@ -190,6 +208,7 @@ public class EditFormF extends Fragment implements  AdapterView.OnItemSelectedLi
     @Override
     public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
         editedStream=String.valueOf(parent.getItemAtPosition(position));
+        spinnerPosition=position;
         Toast.makeText(ctx,"value of stream is"+editedStream,Toast.LENGTH_SHORT).show();
     }
 
@@ -206,8 +225,8 @@ public class EditFormF extends Fragment implements  AdapterView.OnItemSelectedLi
 
         if((editedImage!=null)&&!(dateOfBirth.isEmpty())&&(gender!=null)&&(editedStream!=null)&&(!firstNameText.isEmpty())&&(!lastNameText.isEmpty())) {
 
-            Data data=new Data(editedImage,firstNameText,lastNameText,dateOfBirth);
-            ((FirstPage)getActivity()).setData(data);
+            Data data=new Data(editedImage,firstNameText,lastNameText,dateOfBirth,spinnerPosition,gender);
+            ((FirstPageActivity)getActivity()).setData(data);
             //((FirstPage)getActivity()).setPosition(position);
 
             fragmentManager = getActivity().getSupportFragmentManager();

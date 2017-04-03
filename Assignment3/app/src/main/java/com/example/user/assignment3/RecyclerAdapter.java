@@ -3,6 +3,8 @@ package com.example.user.assignment3;
 import android.content.Context;
 import android.os.Bundle;
 import android.support.v4.app.FragmentManager;
+import android.support.v4.graphics.drawable.RoundedBitmapDrawable;
+import android.support.v4.graphics.drawable.RoundedBitmapDrawableFactory;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -58,7 +60,10 @@ public class RecyclerAdapter extends RecyclerView.Adapter<RecyclerAdapter.ViewHo
 
     @Override
     public void onBindViewHolder(ViewHolder holder, final int position) {
-        holder.imageView.setImageBitmap(dataList.get(position).getImageID());
+
+        RoundedBitmapDrawable roundedBitmapDrawable= RoundedBitmapDrawableFactory.create(frag1.getActivity().getResources(),dataList.get(position).getImageID());
+        roundedBitmapDrawable.setCircular(true);
+        holder.imageView.setImageDrawable(roundedBitmapDrawable);
      holder.first.setText(dataList.get(position).getFirstName());
         holder.last.setText(dataList.get(position).getLastName());
         holder.dob.setText(dataList.get(position).getDateofBirth());

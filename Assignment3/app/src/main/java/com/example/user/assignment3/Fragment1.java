@@ -10,6 +10,7 @@ import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.text.Layout;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -18,13 +19,14 @@ import android.widget.Button;
 import android.widget.Toast;
 
 
+
 public class Fragment1 extends Fragment  {
 
   Button btn;
     public  RecyclerView recyclerView;
      private RecyclerAdapter recyclerAdapter;
 public static FragmentManager fragmentManager;
-
+    private View fragmentContainer;
     private Data recievedData;
     public Fragment1() {
         // Required empty public constructor
@@ -35,7 +37,7 @@ public static FragmentManager fragmentManager;
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-
+         fragmentContainer=(View)getActivity().findViewById(R.id.bt1_fragment);
     }
     @Override
     public void onAttach(Context context) {
@@ -51,18 +53,21 @@ public static FragmentManager fragmentManager;
       super.onStart();
       Data data;
 
-      if(((FirstPage)getActivity()).getData()!=null) {
+      ((FirstPageActivity)getActivity()).setButtonsVisibilityTrue();
+      if(((FirstPageActivity)getActivity()).getData()!=null) {
           Log.d("list sz",String.valueOf(recyclerAdapter.getListSize()));
-          if(recyclerAdapter.getListSize()==((FirstPage)getActivity()).getPosition()){
-          data = ((FirstPage) getActivity()).getData();
-          int position=((FirstPage)getActivity()).getPosition();
+
+
+          if(recyclerAdapter.getListSize()==((FirstPageActivity)getActivity()).getPosition()){
+          data = ((FirstPageActivity) getActivity()).getData();
+          int position=((FirstPageActivity)getActivity()).getPosition();
           recyclerAdapter.addInList(position,data);
               Toast.makeText(getActivity(),"value of size"+String.valueOf(recyclerAdapter.getListSize()),Toast.LENGTH_SHORT).show();
           recyclerAdapter.notifyDataSetChanged();}
           else{
 
-              data = ((FirstPage) getActivity()).getData();
-              int position=((FirstPage)getActivity()).getPosition();
+              data = ((FirstPageActivity) getActivity()).getData();
+              int position=((FirstPageActivity)getActivity()).getPosition();
               recyclerAdapter.updateInList(position,data);
               recyclerAdapter.notifyDataSetChanged();
 
@@ -97,9 +102,10 @@ public static FragmentManager fragmentManager;
        // ((FirstPage)getActivity()).setPosition();
         Data data=recyclerAdapter.getListElement(position);
 
-        ((FirstPage)getActivity()).setData(data);
-        ((FirstPage)getActivity()).setPosition(position);
+        ((FirstPageActivity)getActivity()).setData(data);
+        ((FirstPageActivity)getActivity()).setPosition(position);
         EditFormF editfragment=new EditFormF();
+        ((FirstPageActivity)getActivity()).setButtonsVisibilityFalse();
         //editfragment.setArguments(bundle);
         android.support.v4.app.FragmentTransaction transaction=fragmentManager.beginTransaction();
         transaction.replace(R.id.bt1_fragment,editfragment);
@@ -129,11 +135,14 @@ public static FragmentManager fragmentManager;
 
 public void startFormFragment(){
     FormFragment formFragment=new FormFragment();
+    ((FirstPageActivity)getActivity()).setButtonsVisibilityFalse();
     int pos=recyclerAdapter.getListSize();
-    ((FirstPage)getActivity()).setPosition(pos);
+    ((FirstPageActivity)getActivity()).setPosition(pos);
     FragmentManager fragmentManager=getFragmentManager();
     android.support.v4.app.FragmentTransaction fragmentTransaction=fragmentManager.beginTransaction();
+
     fragmentTransaction.replace(R.id.bt1_fragment,formFragment);
+
     fragmentTransaction.addToBackStack(null);
     fragmentTransaction.commit();
 

@@ -88,7 +88,13 @@
 
         </RadioGroup>
 
-
+       <TextView
+           android:layout_width="match_parent"
+           android:layout_height="40dp"
+           android:hint="Select the stream"
+           android:textColor="@color/colorWhite"
+           android:gravity="center"
+           android:id="@+id/spinner_txt"/>
         <Spinner
             android:id="@+id/streams_spinner"
             android:layout_width="fill_parent"
